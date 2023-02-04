@@ -1,9 +1,9 @@
 
 
 {
-  "name": "Kushal https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md",
-  "short_name": "Kushal https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md",
-  "description": "Started with Salesforce CRM Developer, revving for my next leap into backend engineering.",
+  "name": "Chirpy",
+  "short_name": "Chirpy",
+  "description": "A minimal, responsive, and powerful Jekyll theme for presenting professional writing.",
   "icons": [
     {
       "src": "/assets/img/favicons/android-chrome-192x192.png",
