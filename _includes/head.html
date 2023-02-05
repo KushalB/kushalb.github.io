@@ -1,115 +1,38 @@
-<!--
-  The Head
--->
+<meta charset="utf-8">
+<title>{{ site.description }}</title>
+<meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+{% if page.tags %}<meta name="keywords" content="{{ page.tags | join: ', ' }}">{% endif %}
+{% if site.owner.twitter %}<!-- Twitter Card and Open Graph tags -->
+<meta name="twitter:title" content="{% if page.title %}{{ page.title }} &#8211; {% endif %}{{ site.title }}">
+<meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+<meta name="twitter:creator" content="@{{ site.owner.twitter }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image:src" content="{% if page.image.thumb %}{{ site.url }}/images/{{ page.image.thumb }}{% else %}{{ site.url }}/images/{{ site.logo }}{% endif %}">{% endif %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{% if page.title %}{{ page.title }} &#8211; {% endif %}{{ site.title }}">
+<meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:site_name" content="{{ site.title }}">
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Webmaster Tools verfication -->
+{% if site.google_verify %}<meta name="google-site-verification" content="{{ site.google_verify }}">{% endif %}
+{% if site.bing_verify %}<meta name="msvalidate.01" content="{{ site.bing_verify }}">{% endif %}
 
-  {% if page.layout == 'home' or page.layout == 'post' %}
+{% capture canonical %}{{ site.url }}{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' | strip_slash }}{% endif %}{% endcapture %}
+<link rel="canonical" href="{{ canonical }}">
+<link href="{{ site.url }}/feed.xml" type="application/atom+xml" rel="alternate" title="{{ site.title }} Feed">
+{% if site.owner.google_plus %}<link rel="author" href="{{ site.owner.google_plus }}?rel=author">{% endif %}
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,400;0,900;1,100;1,700;1,900&display=swap" rel="stylesheet">
 
-    {% if site.google_analytics.pv.proxy_endpoint %}
-      <meta name="pv-proxy-endpoint" content="{{ site.google_analytics.pv.proxy_endpoint }}">
-    {% endif %}
-
-    {% if site.google_analytics.pv.cache_path %}
-      <meta name="pv-cache-path" content="{{ site.google_analytics.pv.cache_path | relative_url }}">
-    {% endif %}
-
-  {% endif %}
-
-  {% capture seo_tags %}
-    {% seo title=false %}
-  {% endcapture %}
-
-  {% if page.image %}
-    {% assign img = page.image.path | default: page.image %}
-
-    {% unless img contains '://' %}
-      {% assign img_path = page.img_path | append: '/' | append: img | replace: '//', '/' %}
-      {% capture target %}"{{ img | absolute_url }}"{% endcapture %}
-
-      {% if site.img_cdn contains '//' %}
-        <!-- it's a cross-origin URL -->
-        {% capture replacement %}"{{ site.img_cdn }}{{ img_path }}"{% endcapture %}
-      {% else %}
-        <!-- it's a local file path -->
-        {%- capture replacement -%}
-          "{{ site.img_cdn | append: '/' | append: img_path | replace: '//', '/' | absolute_url }}"
-        {%- endcapture -%}
-      {% endif %}
-
-      {% assign seo_tags = seo_tags | replace: target, replacement %}
-
-    {% endunless %}
-
-  {% endif %}
-
-  {{ seo_tags }}
-
-  <title>
-  {%- unless page.layout == "home" -%}
-    {{ page.title | append: " | "}}
-  {%- endunless -%}
-    {{ site.title }}
-  </title>
-
-  {% include favicons.html %}
-
-  {% if site.resources.ignore_env != jekyll.environment and site.resources.self_hosted %}
-
-    <link href="{{ site.data.assets[origin].webfonts | relative_url }}" rel="stylesheet">
-
-  {% else %}
-
-    {% for cdn in site.data.assets[origin].cdns %}
-      <link rel="preconnect" href="{{ cdn.url }}" {{ cdn.args }}>
-      <link rel="dns-prefetch" href="{{ cdn.url }}" {{ cdn.args }}>
-    {% endfor %}
-
-    <link rel="stylesheet" href="{{ site.data.assets[origin].webfonts | relative_url }}">
-
-  {% endif %}
-
-  <!-- GA -->
-  {% if jekyll.environment == 'production'
-      and site.google_analytics.id != empty and site.google_analytics.id %}
-    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-
-    {% if site.google_analytics.pv.proxy_endpoint %}
-      {% assign proxy_url = site.google_analytics.pv.proxy_endpoint
-          | replace: "https://", "" | split: "/" | first | prepend: "https://" %}
-      <link rel="preconnect" href="{{ proxy_url }}" crossorigin="use-credentials">
-      <link rel="dns-prefetch" href="{{ proxy_url }}">
-    {% endif %}
-  {% endif %}
-
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap.css | relative_url}}">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ site.data.assets[origin].fontawesome.css | relative_url }}">
-
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-
-  {% if site.toc and page.toc %}
-    <link rel="stylesheet" href="{{ site.data.assets[origin].bootstrap-toc.css | relative_url }}">
-  {% endif %}
-
-  {% if page.layout == 'page' or page.layout == 'post' %}
-    <!-- Manific Popup -->
-    <link rel="stylesheet" href="{{ site.data.assets[origin].magnific-popup.css | relative_url }}">
-  {% endif %}
-
-  <!-- JavaScript -->
-
-  <script src="{{ site.data.assets[origin].jquery.js | relative_url }}"></script>
-
-  {% unless site.theme_mode %}
-    {% include mode-toggle.html %}
-  {% endunless %}
-</head>
+{% if site.rtl %}
+<link rel="stylesheet" href="{{ '/css/main.min.rtl.css' | relative_url }}" type="text/css" />
+<style>
+    .highlight pre {
+        direction: ltr;
+    }
+</style>
+{% else %}
+<link rel="stylesheet" href="{{ '/css/main.min.css' | relative_url }}" type="text/css" />
+{% endif %}
