@@ -1,106 +1,166 @@
-<div align="center">
+# White Paper
 
-  # Chirpy Jekyll Theme
+**White Paper** is a theme for Jekyll. It is made keeping content in focus and is best for writers/developers who also like to share code with their essays.
 
-  A minimal, responsive, and powerful Jekyll theme for presenting professional writing.
+## Create blog posts
 
-  [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy?color=brightgreen)](https://rubygems.org/gems/jekyll-theme-chirpy)
-  [![CI](https://github.com/cotes2020/jekyll-theme-chirpy/actions/workflows/ci.yml/badge.svg)](https://github.com/cotes2020/jekyll-theme-chirpy/actions/workflows/ci.yml)
-  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4e556876a3c54d5e8f2d2857c4f43894)](https://www.codacy.com/gh/cotes2020/jekyll-theme-chirpy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cotes2020/jekyll-theme-chirpy&amp;utm_campaign=Badge_Grade)
-  [![GitHub license](https://img.shields.io/github/license/cotes2020/jekyll-theme-chirpy.svg)](https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/LICENSE)
-  [![996.icu](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg)](https://996.icu)
+`jekyll-compose` gem is now installed with jekyll so now creating a new post is as easy as running this simple command
 
-  [**Live Demo →**](https://cotes2020.github.io/chirpy-demo)
+```
+# ensure all the required bundles are installed
+bundle install
+bundle exec jekyll post "Tooling Considered Harmful"
 
-  [![Devices Mockup](https://chirpy-img.netlify.app/commons/devices-mockup.png)](https://cotes2020.github.io/chirpy-demo)
+Configuration file: /Users/vinitkumar/projects/vinitkumar.github.com/_config.yml
+New post created at _posts/2019-03-06-tooling-considered-harmful.md
 
-</div>
+$ git status
 
-## Features
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
 
-- Dark/Light Theme Mode
-- Localized UI language
-- Pinned Posts
-- Hierarchical Categories
-- Trending Tags
-- Table of Contents
-- Last Modified Date of Posts
-- Syntax Highlighting
-- Mathematical Expressions
-- Mermaid Diagram & Flowchart
-- Dark/Light Mode Images
-- Embed Videos
-- Disqus/Utterances/Giscus Comments
-- Search
-- Atom Feeds
-- Google Analytics
-- Page Views Reporting
-- SEO & Performance Optimization
-
-## Quick Start
-
-Before starting, please follow the instructions in the [Jekyll Docs](https://jekyllrb.com/docs/installation/) to complete the installation of `Ruby`, `RubyGems`, `Jekyll`, and `Bundler`. In addition, [Git](https://git-scm.com/) is also required to be installed.
-
-### Step 1. Creating a New Site
-
-Create a new repository from the [**Chirpy Starter**](https://github.com/cotes2020/chirpy-starter/generate) and name it `<GH_USERNAME>.github.io`, where `GH_USERNAME` represents your GitHub username.
-
-### Step 2. Installing Dependencies
-
-Before running for the first time, go to the root directory of your site, and install dependencies as follows:
-
-```console
-$ bundle
+  _posts/2019-03-06-tooling-considered-harmful.md
 ```
 
-### Step 3. Running Local Server
+## White Paper in Action
 
-Run the following command in the root directory of the site:
+#### Blog Page
 
-```console
-$ bundle exec jekyll s
+![home](./listview.png)
+
+#### Detail Page
+
+![post detail](./detailview.png)
+
+#### About Page
+
+![about](./about.png)
+
+
+## How to use White Paper
+
+Fork the repo to your account by clicking the button on the top right as shown in the image:
+
+![fork](https://cldup.com/vOF0oaUkh5-3000x3000.png) and then where you want to fork it as shown below.
+
+Next, Go the the project settings and change the repository name to `<username>.github.io` where username is your username.
+
+Change these entries in the `_config.yml` file:
+
+Also, change this line in head.html [link](https://github.com/vinitkumar/white-paper/blob/9ad021a8f94c6240351bd57eda301b5f207e554e/_includes/head.html#L28)
+
+```html
+<!-- From this -->
+<link rel="stylesheet" href=" {{ '/css/main.min.css' | relative_url }}" type="text/css" />
+<!-- To this -->
+<link rel="stylesheet" href=" {{ '/css/main.min.css' | absolute_url }}" type="text/css" />
+
 ```
 
-Or run with Docker:
 
-```console
-$ docker run -it --rm \
-    --volume="$PWD:/srv/jekyll" \
-    -p 4000:4000 jekyll/jekyll \
-    jekyll serve
+This will make sure that the path of CSS is correct and the theme loads correctly.
+
+```yml
+master_repo: false
+url: "<username>.github.io"
+rtl: false  # change to true if posts is in Arabic/other Right to left language.
+```
+Also, change all other fields in the `_config.yml` file to your choice.
+
+## Installation
+
+### Local Development
+
+This theme requires you to install couple of tools first to setup jekyll locally.
+
+```$
+git clone git@github.com:vinitkumar/white-paper.git
+
+# If you have ruby installed.
+gem install jekyll bundler
+
+# If you have node installed.
+npm install
+sudo npm install -g grunt-cli  #to get the task runner for grunt.
+bundle install
+jekyll serve
+
+# on running the serve script, the site will be live on
+http://127.0.0.1:4000
+```
+This theme uses grunt to concat & minify the css for best performance. In order to prepare the css build. Run `grunt`
+It will create a main.min.css file in the css folder.
+
+### Switch Syntax Highlighting.
+
+This theme also provides syntax highlighting in different theme. Inside css folder, there is a syntax folder.
+
+```$
+.
+├── emacs.css
+├── github.css
+├── monokai.css
+├── native.css
+├── syntax.css
+└── vim.css
+
 ```
 
-After a while, navigate to the site at <http://localhost:4000>.
+Now in the gruntfiles.js
 
-## Documentation
+```js
+concat: {
+  dist: {
+    src: [
+      'css/base.css',
+      'css/sytax/emacs.css', // change this to another theme if you prefer, like vim.css and run grunt
+      'css/octicons.css'
+    ],
+    dest: 'css/<%= pkg.name %>.add.css'
+  }
+}
+```
 
-For more details on usage, please refer to the tutorial on the [demo website](https://cotes2020.github.io/chirpy-demo/) / [wiki](https://github.com/cotes2020/jekyll-theme-chirpy/wiki). Note that the tutorial is based on the [latest release](https://github.com/cotes2020/jekyll-theme-chirpy/releases/latest), and the features of the default branch are usually ahead of the documentation.
+## Contributors
 
-## Contributing
+### Code Contributors
 
-Welcome to report bugs, improve code quality or submit a new feature. For more information, see [contributing guidelines](.github/CONTRIBUTING.md).
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/vinitkumar/white-paper/graphs/contributors"><img src="https://opencollective.com/whitepaper/contributors.svg?width=890&button=false" /></a>
 
-## Credits
+### Financial Contributors
 
-This theme is mainly built with [Jekyll](https://jekyllrb.com/) ecosystem, [Bootstrap](https://getbootstrap.com/), [Font Awesome](https://fontawesome.com/) and some other wonderful tools (their copyright information can be found in the relevant files). The avatar and favicon design come from [Clipart Max](https://www.clipartmax.com/middle/m2i8b1m2K9Z5m2K9_ant-clipart-childrens-ant-cute/).
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/whitepaper/contribute)]
 
-:tada: Thanks to all the volunteers who contributed to this project, their GitHub IDs are on [this list](https://github.com/cotes2020/jekyll-theme-chirpy/graphs/contributors). Also, I won't forget those guys who submitted the issues or unmerged PR because they reported bugs, shared ideas, or inspired me to write more readable documentation.
+#### Individuals
 
-Last but not least, thank [JetBrains][jb] for providing the OSS development license.
+<a href="https://opencollective.com/whitepaper"><img src="https://opencollective.com/whitepaper/individuals.svg?width=890"></a>
 
-## Sponsoring
+#### Organizations
 
-If you like this theme or find it helpful, please consider sponsoring me, because it will encourage and help me better maintain the project, I will be very grateful!
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/whitepaper/contribute)]
 
-[![Ko-fi](https://img.shields.io/badge/-Buy%20Me%20a%20Coffee-ff5f5f?logo=ko-fi&logoColor=white)](https://ko-fi.com/coteschung)
-[![Wechat Pay](https://img.shields.io/badge/-Tip%20Me%20on%20WeChat-brightgreen?logo=wechat&logoColor=white)][cn-donation]
-[![Alipay](https://img.shields.io/badge/-Tip%20Me%20on%20Alipay-blue?logo=alipay&logoColor=white)][cn-donation]
+<a href="https://opencollective.com/whitepaper/organization/0/website"><img src="https://opencollective.com/whitepaper/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/1/website"><img src="https://opencollective.com/whitepaper/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/2/website"><img src="https://opencollective.com/whitepaper/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/3/website"><img src="https://opencollective.com/whitepaper/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/4/website"><img src="https://opencollective.com/whitepaper/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/5/website"><img src="https://opencollective.com/whitepaper/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/6/website"><img src="https://opencollective.com/whitepaper/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/7/website"><img src="https://opencollective.com/whitepaper/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/8/website"><img src="https://opencollective.com/whitepaper/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/whitepaper/organization/9/website"><img src="https://opencollective.com/whitepaper/organization/9/avatar.svg"></a>
 
 ## License
+* see [LICENSE](https://github.com/vinitkumar/white-paper/blob/gh-pages/LICENSE) file
 
-This work is published under [MIT](https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/LICENSE) License.
 
-<!-- ReadMe links -->
+## Version
+* Version 5.0.0
 
-[jb]: https://www.jetbrains.com/?from=jekyll-theme-chirpy
-[cn-donation]: https://sponsor.cotes.page/
+## Contact
+#### Developer
+
+* Homepage: http://vinitkumar.me
+* e-mail: mail@vinitkumar.me
+* Twitter: [@vinitkme](https://twitter.com/vinitkme "vinitkme on twitter")
